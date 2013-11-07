@@ -1,0 +1,7 @@
+"si"
+{
+	"base"			"base"
+	"title"			"Science and Industry"
+	"maps"			"^si_"
+	"menusystem"	"1"
+}
