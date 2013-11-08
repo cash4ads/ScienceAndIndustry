@@ -15,3 +15,7 @@ end
 
 function ENT:PhysicsUpdate(physobj)
 end
+
+function ENT:SetupDataTables()
+	self:NetworkVar("Int", 0, "Team")
+end

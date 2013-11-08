@@ -3,7 +3,8 @@ AddCSLuaFile("shared.lua")
 include('shared.lua')
 
 function ENT:Initialize()
-	self:SetModel("models/kleiner.mdl")
+	self:SetModel("models/humans/scientist.mdl")
+	self:SetSkin(math.random(1, 15))
 
 	self:SetHullType(HULL_HUMAN)
 	self:SetHullSizeNormal()
@@ -18,6 +19,11 @@ function ENT:Initialize()
 end
 
 function ENT:OnTakeDamage(dmg)
+	if dmg:GetAttacker():IsPlayer() and dmg:GetAttacker():Team() == self:GetTeam() then
+		umsg.Start("ScientistDamagedWarning", dmg:GetAttacker())
+		umsg.End()
+		return
+	end
 	self:SetHealth(self:Health() - dmg:GetDamage())
 	if self:Health() <= 0 then
 		self:SetSchedule(SCHED_FALL_TO_GROUND)
@@ -26,6 +32,7 @@ function ENT:OnTakeDamage(dmg)
 		if dmg:GetAttacker():IsPlayer() then
 			umsg.Start("ScientistKilledWarning", dmg:GetAttacker())
 			umsg.End()
+			GAMEMODE.Teams[dmg:GetAttacker():Team()].efficency = math.max(0, GAMEMODE.Teams[dmg:GetAttacker():Team()].efficency - 0.1)
 		end
 	end
 end
